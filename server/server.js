@@ -1,8 +1,9 @@
-const express = require("express");
-const app = express();
-const test = require("./Router/test");
+import express from 'express'
+import router from './Router/test.js'
 
-app.use("/", test);
+const app = express()
+app.use("/api", router)
 
-const port = 5000;
-app.listen(port, () => console.log(`Listening on port ${port}`));
+const PORT = 5000
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
+

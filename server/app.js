@@ -1,5 +1,5 @@
 import express from 'express'
-import path from 'path'
+// import path from 'path'
 import logger from 'morgan'
 import indexRouter from './routes/index.js'
 import passport from 'passport'
@@ -14,7 +14,7 @@ import { privateKey, certificate } from './config/ssl.js'
 dotenv.config()
 
 const app = express()
-const __dirname = path.resolve();
+// const __dirname = path.resolve()
 
 const options = {
   key: privateKey,

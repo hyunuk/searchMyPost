@@ -41,12 +41,6 @@ build/Release
 node_modules/
 jspm_packages/
 
-# TypeScript v1 declaration files
-typings/
-
-# TypeScript cache
-*.tsbuildinfo
-
 # Optional npm cache directory
 .npm
 
@@ -82,15 +76,6 @@ typings/
 .nuxt
 dist
 
-# Gatsby files
-.cache/
-# Comment in the public line in if your project uses Gatsby and *not* Next.js
-# https://nextjs.org/blog/next-9-1#public-directory-support
-# public
-
-# vuepress build output
-.vuepress/dist
-
 # Serverless directories
 .serverless/
 
@@ -103,9 +88,16 @@ dist
 # TernJS port file
 .tern-port
 
+# testing
+/coverage
+
+# production
+/build
+
 # misc
 .DS_Store
 .env.local
 .env.development.local
 .env.test.local
+.env.production.local
 private/

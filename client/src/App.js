@@ -9,7 +9,7 @@ const responseFacebook = (response) => {
 
 function App() {
   const callApi = async () => {
-    axios.get('/api').then((res) => console.log(res.data.test));
+    axios.get('/').then((res) => console.log(res));
   }
 
   useEffect(() => {

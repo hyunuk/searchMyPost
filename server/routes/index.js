@@ -1,9 +1,9 @@
 import express from 'express'
 
-const router = express.Router();
+const router = express.Router()
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   if (req.user) {
     res.send(`
       <h3>Login Success</h3>
@@ -18,6 +18,6 @@ router.get('/', function(req, res, next) {
       <a href="/auth/login/facebook">Login with Facebook</a>
     `)
   }
-});
+})
 
 export default router

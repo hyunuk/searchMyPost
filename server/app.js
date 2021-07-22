@@ -1,14 +1,15 @@
 import express from 'express'
 // import path from 'path'
 import logger from 'morgan'
-import indexRouter from './routes/index.js'
 import passport from 'passport'
 import dotenv from 'dotenv'
 import https from 'https'
 
 import { configSession } from './config/session.js'
 import { configPassport } from './config/passport.js'
+import indexRouter from './routes/index.js'
 import authRouter from './routes/auth.js'
+import postsRouter from './routes/posts.js'
 import { privateKey, certificate } from './config/ssl.js'
 
 dotenv.config()
@@ -31,6 +32,7 @@ configPassport(app, passport)
 // app.use(express.static(path.join(__dirname, '../public')))
 app.use('/', indexRouter)
 app.use('/auth', authRouter)
+app.use('/posts', postsRouter)
 const server = https.createServer(options, app)
 
 server.listen(app.get('port'), () => {
@@ -41,10 +43,5 @@ server.listen(app.get('port'), () => {
   )
   console.log('  Press CTRL-C to stop\n')
 })
-
-// const start = () => {
-// }
-
-// start()
 
 export default app

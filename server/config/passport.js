@@ -3,12 +3,10 @@ import FacebookStrategy from 'passport-facebook'
 export const configPassport = (app, passport) => {
   
   passport.serializeUser((user, done) => {
-    console.log('serialize user', user)
     done(null, user)
   })
   
   passport.deserializeUser((user, done) => {
-    console.log('deserialize user', user)
     done(null, user)
   })
   
@@ -19,11 +17,8 @@ export const configPassport = (app, passport) => {
         clientSecret: process.env['FACEBOOK_CLIENT_SECRET'],
         callbackURL: process.env['FACEBOOK_CALLBACK'],
       },
-      function (accessToken, refreshToken, profile, cb) {
-        console.log('accessToken', accessToken)
-        console.log('refreshToken', refreshToken)
-        console.log('profile', profile)
-        return cb(null, profile)
+      function (accessToken, refreshToken, profile, done) {
+        return done(null, { profile, accessToken, refreshToken })
       }
     )
   )

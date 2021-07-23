@@ -18,7 +18,7 @@ router.get('/login/facebook/callback',
 )
 
 router.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
+  req.session.destroy(() => {
     req.logout()
     res.redirect('/')
   })

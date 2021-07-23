@@ -4,7 +4,7 @@ import { errorCode } from '../util/error.js'
 export const getPosts = async (req, res) => {
   try {
     if (!req.user) {
-      return res.status(404).json({ error: "You should log in to search." })
+      return res.status(404).json({ error: 'You should log in to search.' })
     }
     const { accessToken } = req.user
     const { until, __paging_token } = req.query

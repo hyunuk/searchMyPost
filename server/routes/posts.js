@@ -1,5 +1,6 @@
 import express from 'express'
 import { getPosts } from '../controllers/posts.js'
+import { getSearch } from '../controllers/search.js'
 
 const router = express.Router()
 

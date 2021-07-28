@@ -12,7 +12,6 @@ router.get('/login/facebook/callback',
   passport.authenticate('facebook', {
     failureRedirect: '/' 
   }), (req, res) => {
-    console.log('callback login from facebook', req)
     res.redirect('/')
   }
 )

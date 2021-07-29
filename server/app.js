@@ -9,6 +9,7 @@ import { configPassport } from './config/passport.js'
 import indexRouter from './routes/index.js'
 import authRouter from './routes/auth.js'
 import postsRouter from './routes/posts.js'
+import searchRouter from './routes/posts.js'
 import { privateKey, certificate } from './config/ssl.js'
 
 dotenv.config()
@@ -31,6 +32,8 @@ configPassport(app, passport)
 app.use('/', indexRouter)
 app.use('/auth', authRouter)
 app.use('/posts', postsRouter)
+app.use('/search', searchRouter)
+
 const server = https.createServer(options, app)
 
 server.listen(app.get('port'), () => {

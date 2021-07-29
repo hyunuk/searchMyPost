@@ -1,5 +1,4 @@
 import express from 'express'
-// import path from 'path'
 import logger from 'morgan'
 import passport from 'passport'
 import dotenv from 'dotenv'
@@ -10,12 +9,12 @@ import { configPassport } from './config/passport.js'
 import indexRouter from './routes/index.js'
 import authRouter from './routes/auth.js'
 import postsRouter from './routes/posts.js'
+import searchRouter from './routes/posts.js'
 import { privateKey, certificate } from './config/ssl.js'
 
 dotenv.config()
 
 const app = express()
-// const __dirname = path.resolve()
 
 const options = {
   key: privateKey,
@@ -33,6 +32,8 @@ configPassport(app, passport)
 app.use('/', indexRouter)
 app.use('/auth', authRouter)
 app.use('/posts', postsRouter)
+app.use('/search', searchRouter)
+
 const server = https.createServer(options, app)
 
 server.listen(app.get('port'), () => {

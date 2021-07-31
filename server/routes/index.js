@@ -22,4 +22,11 @@ router.get('/', function(req, res) {
   }
 })
 
+router.get('/me', function(req, res) {
+  if (!req.user) {
+    return res.status(400).json({ error: 'You must login' })
+  }
+  return res.status(200).json(req.user)
+})
+
 export default router

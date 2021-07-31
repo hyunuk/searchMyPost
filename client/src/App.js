@@ -1,28 +1,23 @@
-import axios from 'axios'
-import React, { useEffect } from 'react'
-import FacebookLogin from 'react-facebook-login'
+import React from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import Home from './pages/Home'
+import SearchPage from './pages/SearchPage'
+
 import './App.css'
 
-const responseFacebook = response => {
-    console.log(response)
-}
-
 function App() {
-    const callApi = async () => {
-        axios.get('/').then(res => console.log(res))
-    }
-
-    useEffect(() => {
-        callApi()
-    }, [])
     return (
-        <div>
-            <FacebookLogin
-                appId={process.env.REACT_APP_FACEBOOK_APP_ID}
-                autoLoad={false}
-                fields="name,email,picture"
-                callback={responseFacebook}
-            />
+        <div className="app">
+            <Router>
+                <Switch>
+                    <Route path="/">
+                        <Home />
+                    </Route>
+                    <Route path="/search">
+                        <SearchPage />
+                    </Route>
+                </Switch>
+            </Router>
         </div>
     )
 }

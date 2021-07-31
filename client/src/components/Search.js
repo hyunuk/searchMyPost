@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import SearchIcon from '@material-ui/icons/Search'
-import MicIcon from '@material-ui/icons/Mic'
 import { Button } from '@material-ui/core'
 import './Search.css'
 import { useHistory } from 'react-router-dom'
@@ -8,19 +7,15 @@ import { useStateValue } from '../StateProvider'
 import { actionTypes } from '../reducer'
 
 function Search({ hideButtons = false }) {
-    const [_, dispatch] = useStateValue()
+    const [, dispatch] = useStateValue()
     const history = useHistory()
     const [term, setTerm] = useState('')
 
     const search = e => {
-        e.preventDefault()
-        console.log('search!')
-
         dispatch({
             type: actionTypes.SET_SEARCH_TERM,
             term,
         })
-
         history.push(`/search`)
     }
 
@@ -29,27 +24,25 @@ function Search({ hideButtons = false }) {
             <div className="search__input">
                 <SearchIcon className="search__inputIcon" />
                 <input value={term} onChange={e => setTerm(e.target.value)} />
-                <MicIcon />
             </div>
             {!hideButtons ? (
                 <div className="search__buttons">
-                    <Button onClick={search} type="submit" variant="outlined">
-                        Google Search
+                    <Button onClick={search} variant="outlined">
+                        Linear Search
                     </Button>
-                    <Button variant="outlined">I'm Feeling Lucky</Button>
+                    <Button variant="outlined">Full-text Search</Button>
                 </div>
             ) : (
                 <div className="search__buttons">
                     <Button
                         className="search__buttonsHidden"
                         onClick={search}
-                        type="submit"
                         variant="outlined"
                     >
-                        Google Search
+                        Linear Search
                     </Button>
                     <Button className="search__buttonsHidden" variant="outlined">
-                        I'm Feeling Lucky
+                        Full-text Search
                     </Button>
                 </div>
             )}

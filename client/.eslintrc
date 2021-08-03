@@ -1,0 +1,46 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": ["plugin:react/recommended", "airbnb-base", "airbnb/rules/react"],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly",
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 11,
+        "sourceType": "module"
+    },
+    "plugins": ["react"],
+    "rules": {
+        "arrow-parens": ["error", "as-needed"],
+        "consistent-return": 0,
+        "linebreak-style": [2, "windows"],
+        "no-case-declarations": 0,
+        "no-irregular-whitespace": 0,
+        "no-nested-ternary": 0,
+        "no-param-reassign": 0,
+        "no-restricted-globals": 0,
+        "no-shadow": 0,
+        "no-undef": 0,
+        "no-underscore-dangle": 0,
+        "no-unused-vars": [1, { "args": "none" }],
+        "no-use-before-define": 0,
+        "semi": ["error", "never"],
+        "react/prop-types": 0,
+        "react/jsx-indent": [2, 4],
+        "react/jsx-indent-props": 0,
+        "react/jsx-filename-extension": 0,
+        "react/jsx-max-props-per-line": [2],
+        "react/jsx-props-no-spreading": 0,
+        "react/no-array-index-key": 0,
+        "react/no-unescaped-entities": 0,
+        "indent": ["error", 4],
+        "quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
+    }
+}

@@ -10,29 +10,33 @@ import filteredByTerm from '../filteredByTerm'
 
 function SearchPage() {
     const LIMIT = '&limit=250'
-    const history = useHistory()
+    // const history = useHistory()
     const [{ term, user }] = useStateValue()
     const [data, setData] = useState(null)
     const [paging, setPaging] = useState(null)
     const [resultCount, setResultCount] = useState(null)
+    const fetchInitialData = e => {
+        e?.preventDefault()
+        const accessToken = `access_token=${user.accessToken}`
+        const host = 'https://graph.facebook.com/v11.0/'
+        const path = `${user.id}/feed`
+        const address = `${host}${path}?${accessToken}`
+        fetchData(address)
+    }
     const fetchData = async address => {
         const response = await fetch(address + LIMIT)
         const result = await response.json()
         const filteredData = filteredByTerm(term, result.data)
         setData(filteredData)
-        setPaging({ prev: result.paging.prev, next: result.paging.next })
+        setPaging({ prev: result.paging?.prev, next: result.paging?.next })
         setResultCount(`About ${filteredData?.length} result(s) for ${term}`)
     }
 
     useEffect(() => {
         if (!user) {
-            history.push('/')
+            // history.push('/')
         } else {
-            const accessToken = `access_token=${user.accessToken}`
-            const host = 'https://graph.facebook.com/v11.0/'
-            const path = `${user.id}/feed`
-            const address = `${host}${path}?${accessToken}`
-            fetchData(address)
+            fetchInitialData()
         }
     }, [])
 
@@ -47,39 +51,41 @@ function SearchPage() {
                     />
                 </Link>
                 <div className="searchPage__headerBody">
-                    <Search hideButtons />
+                    <Search search={fetchInitialData} />
                 </div>
             </div>
-            {term && (
-                <div className="searchPage_results">
-                    <p className="searchPage__resultCount">
-                        {resultCount}
-                    </p>
+            <div className="searchPage_results" style={{ margin: '2rem' }}>
+                <p className="searchPage__resultCount">
+                    {resultCount}
+                </p>
 
-                    {data?.map(item => (
-                        <div className="searchPage__result">
-                            <a className="searchPage__resultTitle" href={item.link}>
-                                <h3>{item.link}</h3>
-                            </a>
-                            <p className="searchPage__resultSnippet">
-                                {item.snippet}
-                            </p>
-                            <p className="searchPage__resultCreatedTime">
-                                {new Date(item.createdTime).toLocaleString(navigator.language)}
-                            </p>
-                        </div>
-                    ))}
-                </div>
-            )}
+                {data?.map((item, i) => (
+                    <div key={i} className="searchPage__result">
+                        <a className="searchPage__resultTitle" href={item.link}>
+                            <h3>{item.link}</h3>
+                        </a>
+                        <p className="searchPage__resultSnippet">
+                            {item.snippet}
+                        </p>
+                        <p className="searchPage__resultCreatedTime">
+                            {new Date(item.createdTime).toLocaleString(navigator.language)}
+                        </p>
+                    </div>
+                ))}
+            </div>
             {paging && (
-                <>
-                    <div className="searchPage_prev">
-                        <Button onClick={() => fetchData(paging.prev)}>Prev</Button>
-                    </div>
-                    <div className="searchPage_next">
-                        <Button onClick={() => fetchData(paging.next)}>Next</Button>
-                    </div>
-                </>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    {paging.prev && (
+                        <div className="searchPage_prev">
+                            <Button onClick={() => fetchData(paging.prev)}>Prev</Button>
+                        </div>
+                    )}
+                    {paging.next && (
+                        <div className="searchPage_next">
+                            <Button onClick={() => fetchData(paging.next)}>Next</Button>
+                        </div>
+                    )}
+                </div>
             )}
         </div>
     )

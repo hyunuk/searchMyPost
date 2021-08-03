@@ -1,11 +1,14 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import './Home.css'
 import Login from '../components/Login'
 import Search from '../components/Search'
 import { useStateValue } from '../StateProvider'
+import { actionTypes } from '../reducer'
 
 function Home() {
-    const [{ user }] = useStateValue()
+    const [{ user, term = '' }, dispatch] = useStateValue()
+    const history = useHistory()
 
     const message1 = 'Search my post is the web-app that allows to search your post by keyword.'
     const message2 = 'You can search via linear search without giving any information or full-text search like google.'
@@ -27,7 +30,17 @@ function Home() {
                             alt="logo"
                         />
                         <div className="home__inputContainer">
-                            <Search />
+                            <Search
+                                toggleMode
+                                search={e => {
+                                    e.preventDefault()
+                                    dispatch({
+                                        type: actionTypes.SET_SEARCH_TERM,
+                                        term,
+                                    })
+                                    history.push(`/search`)
+                                }}
+                            />
                         </div>
                     </div>
                 </>

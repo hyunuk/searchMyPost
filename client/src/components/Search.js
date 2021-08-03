@@ -1,56 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
 import SearchIcon from '@material-ui/icons/Search'
-import { Button } from '@material-ui/core'
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
+import ToggleButton from '@material-ui/lab/ToggleButton'
 import './Search.css'
-import { useHistory } from 'react-router-dom'
 import { useStateValue } from '../StateProvider'
 import { actionTypes } from '../reducer'
 
-function Search({ hideButtons = false }) {
+function Search({ toggleMode, search }) {
     const [{ term = '' }, dispatch] = useStateValue()
-    const history = useHistory()
+    const [mode, setMode] = useState('Linear Search')
 
-    const search = e => {
-        dispatch({
-            type: actionTypes.SET_SEARCH_TERM,
-            term,
-        })
-        history.push(`/search`)
+    const handleMode = (e, value) => {
+        setMode(value)
     }
 
     return (
-        <form className="search">
+        <form className="search" onSubmit={search}>
             <div className="search__input">
                 <SearchIcon className="search__inputIcon" />
                 <input
-                    value={term}
+                    type="text"
+                    value={term || ''}
                     onChange={e => dispatch({
                         type: actionTypes.SET_SEARCH_TERM,
                         term: e.target.value,
                     })}
                 />
             </div>
-            {!hideButtons ? (
-                <div className="search__buttons">
-                    <Button onClick={search} variant="outlined">
-                        Linear Search
-                    </Button>
-                    <Button variant="outlined">Full-text Search</Button>
-                    <Button variant="outlined">Upload to DB</Button>
-                </div>
-            ) : (
-                <div className="search__buttons">
-                    <Button
-                        className="search__buttonsHidden"
-                        onClick={search}
-                        variant="outlined"
-                    >
-                        Linear Search
-                    </Button>
-                    <Button className="search__buttonsHidden" variant="outlined">
-                        Full-text Search
-                    </Button>
-                </div>
+            {toggleMode && (
+                <ToggleButtonGroup value={mode} exclusive variant="outlined" style={{ width: '100%', justifyContent: 'center', margin: '1rem auto' }} onChange={handleMode}>
+                    <ToggleButton value="Linear Search">Linear Search</ToggleButton>
+                    <ToggleButton value="Full-text Search">Full-text Search</ToggleButton>
+                </ToggleButtonGroup>
             )}
         </form>
     )

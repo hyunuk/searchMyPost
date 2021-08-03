@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import SearchIcon from '@material-ui/icons/Search'
 import { Button } from '@material-ui/core'
 import './Search.css'
@@ -7,9 +7,8 @@ import { useStateValue } from '../StateProvider'
 import { actionTypes } from '../reducer'
 
 function Search({ hideButtons = false }) {
-    const [, dispatch] = useStateValue()
+    const [{ term = '' }, dispatch] = useStateValue()
     const history = useHistory()
-    const [term, setTerm] = useState('')
 
     const search = e => {
         dispatch({
@@ -23,7 +22,13 @@ function Search({ hideButtons = false }) {
         <form className="search">
             <div className="search__input">
                 <SearchIcon className="search__inputIcon" />
-                <input value={term} onChange={e => setTerm(e.target.value)} />
+                <input
+                    value={term}
+                    onChange={e => dispatch({
+                        type: actionTypes.SET_SEARCH_TERM,
+                        term: e.target.value,
+                    })}
+                />
             </div>
             {!hideButtons ? (
                 <div className="search__buttons">
@@ -31,6 +36,7 @@ function Search({ hideButtons = false }) {
                         Linear Search
                     </Button>
                     <Button variant="outlined">Full-text Search</Button>
+                    <Button variant="outlined">Upload to DB</Button>
                 </div>
             ) : (
                 <div className="search__buttons">

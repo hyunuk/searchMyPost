@@ -1,12 +1,17 @@
 export const initialState = {
     term: null,
     user: null,
+    mode: 'linear',
+    creationDate: null,
+    count: null,
 }
 
 export const actionTypes = {
     SET_SEARCH_TERM: 'SET_SEARCH_TERM',
     LOG_IN: 'LOG_IN',
     LOG_OUT: 'LOG_OUT',
+    MODE_CHANGE: 'MODE_CHANGE',
+    SET_DB: 'SET_DB',
 }
 
 const reducer = (state, action) => {
@@ -25,6 +30,17 @@ const reducer = (state, action) => {
         return {
             ...state,
             user: null,
+        }
+    case actionTypes.MODE_CHANGE:
+        return {
+            ...state,
+            mode: action.mode,
+        }
+    case actionTypes.SET_DB:
+        return {
+            ...state,
+            creationDate: action.creationDate,
+            count: action.count,
         }
 
     default:

@@ -1,15 +1,12 @@
 import express from 'express'
 import logger from 'morgan'
-import passport from 'passport'
 import dotenv from 'dotenv'
 import https from 'https'
 
 import { configSession } from './config/session.js'
-import { configPassport } from './config/passport.js'
-import indexRouter from './routes/index.js'
-import authRouter from './routes/auth.js'
 import postsRouter from './routes/posts.js'
-import searchRouter from './routes/posts.js'
+import searchRouter from './routes/search.js'
+import userRouter from './routes/users.js'
 import { privateKey, certificate } from './config/ssl.js'
 
 dotenv.config()
@@ -23,16 +20,14 @@ const options = {
 }
 app.set('port', process.env.PORT)
 app.use(logger('dev'))
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.json({ limit: '50mb' }))
+app.use(express.urlencoded({ limit: '50mb', extended: false }))
 configSession(app)
-configPassport(app, passport)
 
 // app.use(express.static(path.join(__dirname, '../public')))
-app.use('/', indexRouter)
-app.use('/auth', authRouter)
 app.use('/posts', postsRouter)
 app.use('/search', searchRouter)
+app.use('/user', userRouter)
 
 const server = https.createServer(options, app)
 

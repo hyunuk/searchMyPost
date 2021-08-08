@@ -1,33 +1,50 @@
-import FB from 'fb'
 import { errorCode } from '../util/error.js'
+import db from '../db/index.js'
 
-export const getPosts = async (req, res) => {
+export const postPosts = async (req, res) => {
   try {
-    if (!req.user) {
-      return res.status(404).json({ error: 'You should log in to search.' })
+    const { user, creationDate, posts } = req.body.params
+    const index = user.id
+    if (creationDate) {
+      await db.indices.delete({ index })
     }
-    const { accessToken } = req.user
-    const { until, __paging_token } = req.query
-    const limit = 300
-    const fb = new FB.Facebook({
-      accessToken,
-      appId: process.env['FACEBOOK_CLIENT_ID'],
-      appSecret: process.env['FACEBOOK_CLIENT_SECRET'],
-    })
-    fb.api('/me/feed', 'GET', { limit, accessToken, until, __paging_token },
-      function(response) {
-        const posts = response.data.map(elem => {
-          const [userLink, postLink] = elem.id.split('_')
-          return { created_time: elem.created_time,
-            message: elem.message,
-            link: `https://www.facebook.com/${userLink}/posts/${postLink}`
-          }
-        })
-        res.send(`
-          ${JSON.stringify(posts, null, 2)}
-        `)
+    
+    await db.indices.create({
+      index,
+      body: {
+        settings: { analysis: { analyzer: { nori_analyzer: { tokenizer: 'nori_tokenizer' } } } },
+        mappings: { properties: {
+          id: { type: 'text' },
+          created_time: { type: 'date' },
+          message: {
+            type: 'text',
+            fields: { kor: { type: 'text', analyzer: 'nori' },
+              eng: { type: 'text', analyzer: 'english' } }
+          },
+          link: { type: 'text' },
+        } }
       }
-    )
+    }, { ignore: [400] })
+    const body = posts.flatMap(doc => [{ index: { _index: index } }, doc])
+    const { body: bulkResponse } = await db.bulk({ refresh: true, body })
+
+    if (bulkResponse.errors) {
+      const erroredDocuments = []
+      bulkResponse.items.forEach((action, i) => {
+        const operation = Object.keys(action)[0]
+        if (action[operation].error) {
+          erroredDocuments.push({
+            status: action[operation].status,
+            error: action[operation].error,
+            operation: body[i * 2],
+            document: body[i * 2 + 1]
+          })
+        }
+      })
+      console.log(erroredDocuments)
+    }
+    const count = await db.count({ index })
+    return res.status(201).json(count.body.count)
   } catch (err) {
     return res.status(errorCode(err)).json({ error: err.message })
   }

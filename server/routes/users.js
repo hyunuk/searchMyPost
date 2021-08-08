@@ -1,9 +1,8 @@
-var express = require('express')
-var router = express.Router()
+import express from 'express'
+import { getUser } from '../controllers/user.js'
 
-/* GET users listing. */
-router.get('/', function(req, res) {
-  res.send('respond with a resource')
-})
+const router = express.Router()
 
-module.exports = router
+router.get('/', getUser)
+
+export default router
